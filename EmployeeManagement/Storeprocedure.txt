@@ -1,0 +1,61 @@
+﻿USE [Company_DB]
+GO
+/****** Object:  StoredProcedure [dbo].[spUpdateEmployeeSalary]    Script Date: 08-09-2021 10:07:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER procedure [dbo].[spUpdateEmployeeSalary]
+@id int,
+@month varchar(20),
+@salary int,
+@EmpId int
+as
+BEGIN
+--below line will cause transaction uncommitable if constraint violation occur
+set XACT_ABORT on;
+begin try
+begin TRANSACTION;
+update SALARY
+set EMPSAL=@salary
+where SALARYId=@id and SALARYMONTH=@month and EmpId=@EmpId;
+select e.EmpId,e.EName,s.EMPSAL,s.SALARYMONTH,s.SALARYId
+from Employee e inner join SALARY s
+ON e.EmpId=s.EmpId where s.SALARYId=@id;
+COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+select ERROR_NUMBER() AS ErrorNumber, ERROR_MESSAGE() AS ErrorMessage;
+IF(XACT_STATE())=-1
+BEGIN
+  PRINT N'The transaction is in an uncommitable state.'+'Rolling back transaction.'
+  ROLLBACK TRANSACTION;
+  END;
+
+  IF(XACT_STATE())=1
+  BEGIN
+    PRINT 
+	    N'The transaction is committable. '+'Committing transaction.'
+       COMMIT TRANSACTION;
+	END;
+	END CATCH
+END
+
+CREATE TABLE [dbo].[Employee](
+	[EmpId] [int] IDENTITY(1,1) NOT NULL,
+	[EName] [varchar](20) NULL,
+	[Email] [varchar](20) NULL);
+
+	select * from [dbo].[Employee]
+
+	insert into Employee Values('Rahul','Rahul@gmail.com');
+	insert into Employee Values('Ravi','Ravi@gmail.com');
+
+	select * from [dbo].[Salary]
+
+	insert into Salary Values('Jan',10000,3);
