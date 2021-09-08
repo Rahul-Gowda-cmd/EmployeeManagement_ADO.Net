@@ -12,6 +12,7 @@ namespace EmployeeManagement
         {
             return new SqlConnection(@"Data Source=(LocalDb)\localdb;Initial Catalog=Company_DB;Integrated Security=True");
         }
+
         public int UpdateEmployeeSalary(SalaryUpdateModel salaryUpdateModel)
         {
             SqlConnection SalaryConnection = ConnectionSetup();

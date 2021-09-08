@@ -4,6 +4,7 @@ using System.Text;
 
 namespace EmployeeManagement.Model.SalaryModel
 {
+
     public class SalaryDetailModel
     {
         public int EmployeeId { get; set; }

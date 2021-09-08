@@ -46,6 +46,7 @@ BEGIN
 	END CATCH
 END
 
+
 CREATE TABLE [dbo].[Employee](
 	[EmpId] [int] IDENTITY(1,1) NOT NULL,
 	[EName] [varchar](20) NULL,
